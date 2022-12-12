@@ -32,32 +32,32 @@ function Square ({value}) {
 
     if(value < 50 && value %10 ===3){
       return(
-        <button className = {"square black"}><div className={"checker white"}></div></button>
+        <button className = {"square black"}><button className={"checker red"}></button></button>
       )
     }
     else if(value<50 && value%10===1){
       return(
-        <button className = {"square black"}><div className={"checker white"}></div></button>
+        <button className = {"square black"}><button className={"checker red"}></button></button>
       )
     }
     else if (value <50 && value %10 ===9){
       return(
-        <button className = {"square black"}><div className={"checker white"}></div></button>
+        <button className = {"square black"}><button className={"checker red"}></button></button>
       )
     }
     else if(value>55 &&value %10===5){
       return(
-        <button className = {"square black"}><div className={"checker red"}></div></button>
+        <button className = {"square black"}><button className={"checker black"}></button></button>
       )
     }
     else if (value>55 && value %10 ===3){
       return(
-        <button className = {"square black"}><div className={"checker red"}></div></button>
+        <button className = {"square black"}><button className={"checker black"}></button></button>
       )
     }
     else if(value >55 && value %10 ===1){
       return(
-        <button className = {"square black"}><div className={"checker red"}></div></button>
+        <button className = {"square black"}><button className={"checker black"}></button></button>
       )
     }
 
