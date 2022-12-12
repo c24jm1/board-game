@@ -18,6 +18,10 @@ ul{
     margin-bottom:10px;
 }
 
+.red{
+    background-color: red;
+}
+
 .checker{
     height: 20px;
     width: 20px;
@@ -25,8 +29,9 @@ ul{
 }
 
 .square{
-    background:#fff;
     border: 1px solid #999;
+    height: 10px;
+    width: 50px;
     float:left;
     font-size:24px;
     font-weight: bold;
@@ -38,6 +43,16 @@ ul{
     text-align:center;
     width:34px;
 }
+
+.white{
+    background:#fff;
+
+}
+
+.black{
+    background:rgb(0, 0, 0);
+}
+
 
 .square:focus{
     outline:none;
