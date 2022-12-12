@@ -23,9 +23,11 @@ ul{
 }
 
 .checker{
+    display: flex;
     height: 20px;
     width: 20px;
     border-radius:50%;
+    justify-content: center;
 }
 
 .square{
