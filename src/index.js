@@ -2,6 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client'
 import "./index.css"
 
+
+
+
+// 0 1 2 3 4 5 6 7
+// 8 9 10 11 12 13 14 15
+// 
+
 const counter = 0;
 const square = 0;
 const color = " ";
@@ -10,65 +17,26 @@ function Square ({value}) {
 
   console.log(value)
 
-// 8 13 18 23 28 33 38 43
-// 11 16 21 26 31 36 41 46
-// 14 19 24 29 34 39 44 49
 
-
-// 17 22 27 32 37 42 47 52
-// 20 25 30 35 40 45 50 55
-
-// 65 70 75 80 85 90 95 100
-// 68 73 78 83 88 93 98 103
-// 71 76 81 86 91 96 101 106
-
-
-
-
-
-
-  if (value % 2 === 0){
+  if (value % 2 === 1){
     return (
       <button className={"square white"}>
       </button>
     );
   }
-  else if (value%2 ===1){
+  else if (value%2 ===0){
 
-    if(value < 50 && value %10 ===3){
+    if(value < 25){
       return(
         <button className = {"square black"}><button className={"checker red"}></button></button>
       )
     }
-    else if(value<50 && value%10===1){
+    else if(value>43){
       return(
-        <button className = {"square black"} onClick = {squareClicked}><button className={"checker red"} onClick = {checkerClicked({value}, "red")}></button></button>
+        <button className = {"square black"} onClick = {squareClicked}><button className={"checker black"} onClick = {checkerClicked({value}, "red")}></button></button>
       )
     }
-    else if (value <50 && value %10 ===9){
-      return(
-        <button className = {"square black"}><button className={"checker red"}></button></button>
-      )
-    }
-    else if(value>55 &&value %10===5){
-      return(
-        <button className = {"square black"}><button className={"checker black"}></button></button>
-      )
-    }
-    else if (value>55 && value %10 ===3){
-      return(
-        <button className = {"square black"}><button className={"checker black"}></button></button>
-      )
-    }
-    else if(value >55 && value %10 ===1){
-      return(
-        <button className = {"square black"}><button className={"checker black"}></button></button>
-      )
-    }
-
-
-
-
+    
     else{
       return (
         <button className={"square black"}>
@@ -94,18 +62,92 @@ class Board extends React.Component {
 
     return (
       <div>
-      {
-      	[1,2,3,4,5,20,21,22].map( (row) => {
-				 return <div key={row} className="board-row">
-            {
-            	[1,2,3,4,5,6,7,8].map( (col) => {
-               return this.renderSquare((5*col+3*row))
-          		})
-            }
+              <div className="board-row">
+          {this.renderSquare(0)}
+          {this.renderSquare(1)}
+          {this.renderSquare(2)}
+          {this.renderSquare(3)}
+          {this.renderSquare(4)}
+          {this.renderSquare(5)}
+          {this.renderSquare(6)}
+          {this.renderSquare(7)}
             </div>
+            <div className = "board-row">
+                {this.renderSquare(9)}
+                {this.renderSquare(10)}
+                {this.renderSquare(11)}
+                {this.renderSquare(12)}
+                {this.renderSquare(13)}
+                {this.renderSquare(14)}
+                {this.renderSquare(15)}
+                {this.renderSquare(16)}
+            </div>
+            <div className = "board-row">
+            {this.renderSquare(18)}
+                {this.renderSquare(19)}
+                {this.renderSquare(20)}
+                {this.renderSquare(21)}
+                {this.renderSquare(22)}
+                {this.renderSquare(23)}
+                {this.renderSquare(24)}
+                {this.renderSquare(25)}
+            </div>
+            <div className = "board-row">
+            {this.renderSquare(27)}
+            {this.renderSquare(28)}
+            {this.renderSquare(29)}
+            {this.renderSquare(30)}
+            {this.renderSquare(31)}
+            {this.renderSquare(32)}
+            {this.renderSquare(33)}
+            {this.renderSquare(34)}
+            </div>
+            <div className = "board-row">
+            {this.renderSquare(36)}
+            {this.renderSquare(37)}
+            {this.renderSquare(38)}
+            {this.renderSquare(39)}
+            {this.renderSquare(40)}
+            {this.renderSquare(41)}
+            {this.renderSquare(42)}
+            {this.renderSquare(43)}
+            </div>
+            <div className = "board-row">
+                {this.renderSquare(45)}
+                {this.renderSquare(46)}
+                {this.renderSquare(47)}
+                {this.renderSquare(48)}
+                {this.renderSquare(49)}
+                {this.renderSquare(50)}
+                {this.renderSquare(51)}
+                {this.renderSquare(52)}
+            </div>
+            <div className = "board-row">
+                {this.renderSquare(54)}
+                {this.renderSquare(55)}
+                {this.renderSquare(56)}
+                {this.renderSquare(57)}
+                {this.renderSquare(58)}
+                {this.renderSquare(59)}
+                {this.renderSquare(60)}
+                {this.renderSquare(61)}
+            </div>
+            <div className = "board-row">
+                {this.renderSquare(63)}
+                {this.renderSquare(64)}
+                {this.renderSquare(65)}
+                {this.renderSquare(66)}
+                {this.renderSquare(67)}
+                {this.renderSquare(68)}
+                {this.renderSquare(69)}
+                {this.renderSquare(70)}
+            </div>
+        
 
-      	})
-      }
+
+
+      
+
       </div>
     );
   }
@@ -120,14 +162,14 @@ function checkerClicked(currentSquare, checkerColor){
       counter = 0
   }
 }
-  if(checkerColor==="red"&& this.state.blackTurn===false){
-    counter+=1
-    square = currentSquare;
-    color = checkerColor;
-    if(counter %2 ===0){
-      counter = 0
-  }
-  }
+  // if(checkerColor==="red"&& this.state.blackTurn===false){
+  //   counter+=1
+  //   square = currentSquare;
+  //   color = checkerColor;
+  //   if(counter %2 ===0){
+  //     counter = 0
+  // }
+  // }
 }
 
 function squareClicked(currentSquare){
@@ -144,6 +186,11 @@ function squareClicked(currentSquare){
     
 
 
+  }
+  if(color === "black"){
+    if(square-8===currentSquare || square+2 ===currentSquare){
+      //get rid of checker on current square and redner on next one
+    }
   }
 
 
