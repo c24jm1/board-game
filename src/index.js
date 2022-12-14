@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client'
 import "./index.css"
 
+const counter = 0;
+const square = 0;
+const color = " ";
+
 function Square ({value}) {
 
   console.log(value)
@@ -22,6 +26,7 @@ function Square ({value}) {
 
 
 
+
   if (value % 2 === 0){
     return (
       <button className={"square white"}>
@@ -37,7 +42,7 @@ function Square ({value}) {
     }
     else if(value<50 && value%10===1){
       return(
-        <button className = {"square black"}><button className={"checker red"}></button></button>
+        <button className = {"square black"} onClick = {squareClicked}><button className={"checker red"} onClick = {checkerClicked({value}, "red")}></button></button>
       )
     }
     else if (value <50 && value %10 ===9){
@@ -73,7 +78,12 @@ function Square ({value}) {
   }
 
 
+  
 }
+
+
+
+
 
 class Board extends React.Component {
   renderSquare(i) {
@@ -101,18 +111,66 @@ class Board extends React.Component {
   }
 }
 
-class Checker extends React.Component {
-  render() {
-    return (
-      <div className="checker" />
-    )
+function checkerClicked(currentSquare, checkerColor){
+  if(checkerColor=== "black"&&this.state.blackTurn===true){
+    counter+=1
+    square = currentSquare;
+    color = checkerColor;
+    if(counter %2 ===0){
+      counter = 0
   }
 }
+  if(checkerColor==="red"&& this.state.blackTurn===false){
+    counter+=1
+    square = currentSquare;
+    color = checkerColor;
+    if(counter %2 ===0){
+      counter = 0
+  }
+  }
+}
+
+function squareClicked(currentSquare){
+  if(counter % 2 === 0){
+    return
+  }
+  else{
+    counter +=2;
+  }
+  if(color === "red"){
+    if(square +8 === currentSquare || square -2 ===currentSquare){
+      //get rid of checker on current square and render on next one
+    }
+    
+
+
+  }
+
+
+
+}
+
+
+// class Checker {
+  
+//     constructor()
+// }
 
 
 
 
 class Game extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+        history:[{
+        squares:Array(9).fill(null)}],
+        stepNumber:0,
+        blackTurn: true,
+    }
+  }
+
+
   render() {
     return (
       <div className="game">
