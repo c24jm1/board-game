@@ -30,6 +30,7 @@ ul{
     display: grid;
     height: 20px;
     width: 20px;
+    margin-left: 5px;
     border-radius:50%;
     align-self: center;
     justify-content: center;

@@ -5,35 +5,40 @@ import "./index.css"
 
 
 
-// 0 1 2 3 4 5 6 7
-// 8 9 10 11 12 13 14 15
-// 
+// 0  1  2  3  4  5  6  7
+// 9  10 11 12 13 14 15 16
+// 18 19 20 21 22 23 24 25
+// 27 28 29 30 31 32 33 34
+// 36 37 38 39 40 41 42 43
+// 45 46 47 48 49 50 51 52
+// 54 55 56 57 58 59 60 61
+// 63 64 65 66 67 68 69 70
 
-const counter = 0;
-const square = 0;
-const color = " ";
+var counter = 0;
+var square = 0;
+var color = " ";
 
 function Square ({value}) {
 
   console.log(value)
 
 
-  if (value % 2 === 1){
+  if (value % 2 === 0){
     return (
       <button className={"square white"}>
       </button>
     );
   }
-  else if (value%2 ===0){
+  else if (value%2 ===1){
 
-    if(value < 25){
+    if(value < 27){
       return(
         <button className = {"square black"}><button className={"checker red"}></button></button>
       )
     }
     else if(value>43){
       return(
-        <button className = {"square black"} onClick = {squareClicked}><button className={"checker black"} onClick = {checkerClicked({value}, "red")}></button></button>
+        <button className = {"square black"} onClick = {squareClicked()}><button className={"checker black"} onClick = {checkerClicked({value}, "black")}></button></button>
       )
     }
     
@@ -44,13 +49,7 @@ function Square ({value}) {
     );
   }
   }
-
-
-  
 }
-
-
-
 
 
 class Board extends React.Component {
@@ -154,22 +153,25 @@ class Board extends React.Component {
 }
 
 function checkerClicked(currentSquare, checkerColor){
-  if(checkerColor=== "black"&&this.state.blackTurn===true){
+  if(checkerColor === "black"/*&&this.state.blackTurn===true*/){
+    console.log(counter)
+    // counter+=1
+    // console.log(counter)
+    square = currentSquare;
+    color = checkerColor;
+    // square[currentSquare]
+    if(counter %2 ===0){
+      counter = 0
+  }
+}
+  else if(checkerColor==="red"/*&& this.state.blackTurn===false*/){
     counter+=1
     square = currentSquare;
     color = checkerColor;
     if(counter %2 ===0){
       counter = 0
   }
-}
-  // if(checkerColor==="red"&& this.state.blackTurn===false){
-  //   counter+=1
-  //   square = currentSquare;
-  //   color = checkerColor;
-  //   if(counter %2 ===0){
-  //     counter = 0
-  // }
-  // }
+  }
 }
 
 function squareClicked(currentSquare){
@@ -180,7 +182,7 @@ function squareClicked(currentSquare){
     counter +=2;
   }
   if(color === "red"){
-    if(square +8 === currentSquare || square -2 ===currentSquare){
+    if(square +8 === currentSquare || square +10 ===currentSquare){
       //get rid of checker on current square and render on next one
     }
     
@@ -188,7 +190,7 @@ function squareClicked(currentSquare){
 
   }
   if(color === "black"){
-    if(square-8===currentSquare || square+2 ===currentSquare){
+    if(square-8===currentSquare || square-10 ===currentSquare){
       //get rid of checker on current square and redner on next one
     }
   }
