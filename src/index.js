@@ -14,9 +14,7 @@ import "./index.css"
 // 54 55 56 57 58 59 60 61
 // 63 64 65 66 67 68 69 70
 
-var counter = 0;
-var square = 0;
-var color = " ";
+var checkerNum = -20;
 
 function Square ({value}) {
 
@@ -33,13 +31,18 @@ function Square ({value}) {
 
     if(value < 27){
       return(
-        <button className = {"square black"}><button className={"checker red"}></button></button>
+        <div id = {value}>
+        <button className = {"square black"} onClick = {()=>squareClicked(value)}><div className={"checker white"}></div></button>
+        </div>
       )
     }
     else if(value>43){
       return(
-        <button className = {"square black"} onClick = {squareClicked()}><button className={"checker black"} onClick = {checkerClicked({value}, "black")}></button></button>
-      )
+        <div id = {value}>
+        <button className = {"square black"} onClick = {()=>squareClicked(value)} ><div className={"checker red"}></div></button>
+      </div>
+        //problem: every time it runs line above, it also runs squareclicked and checkerClicked
+        )
     }
     
     else{
@@ -152,48 +155,49 @@ class Board extends React.Component {
   }
 }
 
-function checkerClicked(currentSquare, checkerColor){
-  if(checkerColor === "black"/*&&this.state.blackTurn===true*/){
-    console.log(counter)
-    // counter+=1
-    // console.log(counter)
-    square = currentSquare;
-    color = checkerColor;
-    // square[currentSquare]
-    if(counter %2 ===0){
-      counter = 0
-  }
-}
-  else if(checkerColor==="red"/*&& this.state.blackTurn===false*/){
-    counter+=1
-    square = currentSquare;
-    color = checkerColor;
-    if(counter %2 ===0){
-      counter = 0
-  }
-  }
-}
 
 function squareClicked(currentSquare){
-  if(counter % 2 === 0){
-    return
+  console.log(document.getElementById(currentSquare))
+  if (document.getElementById(currentSquare).classList.contains("checker")){
+    //for some reason it doesn't think "checker" is in it — it doesn't seem to think anything is in it
+      checkerNum = currentSquare
+      console.log(checkerNum)
   }
   else{
-    counter +=2;
-  }
-  if(color === "red"){
-    if(square +8 === currentSquare || square +10 ===currentSquare){
-      //get rid of checker on current square and render on next one
-    }
-    
+    console.log("hello!")
 
 
-  }
-  if(color === "black"){
-    if(square-8===currentSquare || square-10 ===currentSquare){
-      //get rid of checker on current square and redner on next one
+    if(checkerNum >0){
+      if(document.getElementById({currentSquare}).contains("black")){
+        if(document.getElementById(checkerNum).contains("red")){
+          if(checkerNum-8 ===currentSquare || checkerNum-10 ===currentSquare){
+            document.getElementById({checkerNum}).classList.remove("checker red")
+            document.getElementById(currentSquare).classList.add("checker red")
+        }
+          else if(checkerNum-16===currentSquare||checkerNum-20===currentSquare){
+            document.getElementById({checkerNum}).classList.remove("checker red")
+            document.getElementById(currentSquare).classList.add("checker red")
+            // document.getElementById()
+        }
+        }
+        else if(document.getElementById(checkerNum).contains("white")){
+          if(checkerNum+8 ===currentSquare || checkerNum+10 ===currentSquare){
+            document.getElementById({checkerNum}).classList.remove("checker white")
+            document.getElementById(currentSquare).classList.add("checker white")
+        }
+        }
+      }
+
     }
   }
+
+  //check class to see if it contains checker
+  //if it does, update by noting square. if not, do not. 
+  //
+
+
+
+
 
 
 
