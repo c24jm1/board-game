@@ -26,6 +26,20 @@ ul{
     background-color: red;
 }
 
+.king{
+    border-color: black;
+    border-width: 3px;
+    background-color: black;
+    height: 7px;
+    width: 7px;
+    border-radius: 50%;
+    margin-left: 1px;
+    
+    align-self: center;
+    justify-content: center;
+    place-self: center;
+}
+
 .checker{
     display: grid;
     height: 20px;
