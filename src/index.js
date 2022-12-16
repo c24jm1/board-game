@@ -19,6 +19,9 @@ var checkerNum = -20;
 var lastMoved = 23;
 var blackTurn = true;
 
+var redPieces = 13;
+var whitePieces = 13;
+
 function Square ({value}) {
 
 
@@ -34,13 +37,13 @@ function Square ({value}) {
     if(value < 27){
       return(
         <div>
-        <button id = {value} className = {"square black"} onClick = {()=>SquareClicked(value)}><div className={"checker white"}></div></button>
+        <button id = {value} className = {"square black"} onClick = {()=>SquareClicked(value)}><div className={"white checker"}></div></button>
         </div>
       )
     }
     else if(value>43){
       return(
-        <button id = {value} className = {"square black"} onClick = {()=>SquareClicked(value)} ><div className={"checker red"}></div></button>
+        <button id = {value} className = {"square black"} onClick = {()=>SquareClicked(value)}><div className={"checker red"}><div className = {"checker"}></div></div></button>
         
         )
     }
@@ -196,7 +199,7 @@ function SquareClicked(currentSquare){
             checkerNum = -20;
 
             if(currentSquare>62){
-              document.getElementById(currentSquare).firstChild.classList.add("king")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.add("king")
                 //promotion to king
               }
         }
@@ -210,6 +213,8 @@ function SquareClicked(currentSquare){
               //if they try to capture
             if(document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.contains("checker")&&document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.contains("white")){
                 console.log("red capture!!")
+                whitePieces-=1;
+
               //check if there's a checker in between
               document.getElementById(checkerNum).firstChild.classList.remove("checker")
               document.getElementById(checkerNum).firstChild.classList.remove("red")
@@ -245,6 +250,7 @@ function SquareClicked(currentSquare){
           }
           
           else if((checkerNum+16===currentSquare||checkerNum+20===currentSquare)
+          //king backwards capture
                     && document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.contains("checker white"))
                     {
               document.getElementById(checkerNum).firstChild.classList.remove("checker")
@@ -255,6 +261,7 @@ function SquareClicked(currentSquare){
               document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.classList.remove("white")
               // setBlackTurn(false);
               lastMoved = currentSquare;
+              whitePieces-=1;
             
           }
 
@@ -288,7 +295,10 @@ function SquareClicked(currentSquare){
         }
           else if(checkerNum+16 ===currentSquare || checkerNum+20 ===currentSquare){
             if(document.getElementById((currentSquare-checkerNum)/2+checkerNum).firstChild.classList.contains("checker")&&document.getElementById((currentSquare-checkerNum)/2+checkerNum).firstChild.classList.contains("red")){
-              console.log("capture!!")
+            
+
+              redPieces-=1;
+              console.log(redPieces)
               //capture for white side
               document.getElementById(checkerNum).firstChild.classList.add("black")
               document.getElementById(checkerNum).firstChild.classList.add("square")
@@ -326,6 +336,22 @@ function SquareClicked(currentSquare){
 
             }
           }
+          else if((checkerNum-16===currentSquare||checkerNum-20===currentSquare)
+          //king backwards capture
+                    && document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.contains("checker red"))
+                    {
+              document.getElementById(checkerNum).firstChild.classList.remove("checker")
+              document.getElementById(checkerNum).firstChild.classList.remove("white")
+              document.getElementById(currentSquare).classList.add("checker")
+              document.getElementById(currentSquare).firstChild.classList.add("white")
+              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.classList.remove("checker")
+              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.classList.remove("red")
+              // setBlackTurn(false);
+              lastMoved = currentSquare;
+              redPieces-=1;
+            
+          }
+
         }
 
         }
