@@ -16,6 +16,7 @@ import "./index.css"
 // 63 64 65 66 67 68 69 70
 
 var checkerNum = -20;
+var lastMoved = 23;
 var blackTurn = true;
 
 function Square ({value}) {
@@ -32,24 +33,24 @@ function Square ({value}) {
 
     if(value < 27){
       return(
-        <div id = {value}>
-        <button className = {"square black"} onClick = {()=>SquareClicked(value)}><div className={"checker white"}></div></button>
+        <div>
+        <button id = {value} className = {"square black"} onClick = {()=>SquareClicked(value)}><div className={"checker white"}></div></button>
         </div>
       )
     }
     else if(value>43){
       return(
-        <div id = {value}>
-        <button className = {"square black"} onClick = {()=>SquareClicked(value)} ><div className={"checker red"}></div></button>
-      </div>
+        <button id = {value} className = {"square black"} onClick = {()=>SquareClicked(value)} ><div className={"checker red"}></div></button>
         
         )
     }
     
     else{
       return (
-        <button className={"square black"}>
+        <button id = {value} className={"square black"} onClick = {()=>SquareClicked(value)}>
+          <div className = {"square black"}></div>
           </button>
+          
     );
   }
   }
@@ -159,54 +160,74 @@ class Board extends React.Component {
 
 function SquareClicked(currentSquare){
 
-  // const [blackTurn, setBlackTurn] = useState(true);
+  // const [BlackTurn, setBlackTurn] = useState(true);
 
-  console.log(document.getElementById(currentSquare))
-  if (document.getElementById(currentSquare).classList.contains("checker")){
-    //for some reason it doesn't think "checker" is in it — it doesn't seem to think anything is in it
+  console.log(document.getElementById(currentSquare).firstChild.classList.value)
+  if (document.getElementById(currentSquare).firstChild.classList.contains("checker")){
+    
       checkerNum = currentSquare
       console.log(checkerNum)
   }
   else{
-    console.log("hello!")
+    console.log("no checker on square!")
 
 
     if(checkerNum >0){
       //you don't need to worry about a checker being on the square moving to bc already know
       //because of first if statement on 160
-      if(blackTurn===true){
+      if(document.getElementById(lastMoved).firstChild.classList.contains("white")){
         //not sure if the blackTurn works.
-        if(document.getElementById(checkerNum).contains("red")){
+        if(document.getElementById(checkerNum).firstChild.classList.contains("red")){
         //if the checker is red
 
 
           if(checkerNum-8 ===currentSquare || checkerNum-10 ===currentSquare){
             //normal move for red side
-            document.getElementById({checkerNum}).classList.remove("checker red")
-            document.getElementById(currentSquare).classList.add("checker red")
+            document.getElementById(checkerNum).firstChild.classList.remove("checker")
+            document.getElementById(checkerNum).firstChild.classList.remove("red")
+            document.getElementById(checkerNum).firstChild.classList.add("black")
+            document.getElementById(checkerNum).firstChild.classList.add("square")
+            document.getElementById(currentSquare).firstChild.classList.remove("square")
+            document.getElementById(currentSquare).firstChild.classList.remove("black")
+            document.getElementById(currentSquare).firstChild.classList.add("checker")
+            document.getElementById(currentSquare).firstChild.classList.add("red")
             // setBlackTurn(false);
-            blackTurn = false;
+            lastMoved = currentSquare;
             checkerNum = -20;
 
             if(currentSquare>62){
-              document.getElementById(currentSquare).classList.add("king")
+              document.getElementById(currentSquare).firstChild.classList.add("king")
                 //promotion to king
               }
         }
           else if((checkerNum-16===currentSquare||checkerNum-20===currentSquare)){
+            console.log("potential capture")
+            console.log(checkerNum)
+            console.log(currentSquare)
+            console.log((checkerNum-currentSquare)/2)
+            console.log((checkerNum-currentSquare)/2 +currentSquare)
+            console.log(document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.value)
               //if they try to capture
-              if(document.getElementById((checkerNum-currentSquare)/2 + currentSquare).classList.contains("checker white")){
+            if(document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.contains("checker")&&document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.contains("white")){
+                console.log("red capture!!")
               //check if there's a checker in between
-              document.getElementById(checkerNum).classList.remove("checker red")
-              document.getElementById(currentSquare).classList.add("checker red")
-              document.getElementById((checkerNum-currentSquare)/2 + currentSquare).classList.remove("checker white")
+              document.getElementById(checkerNum).firstChild.classList.remove("checker")
+              document.getElementById(checkerNum).firstChild.classList.remove("red")
+              document.getElementById(checkerNum).firstChild.classList.add("black")
+              document.getElementById(checkerNum).firstChild.classList.add("square")
+              document.getElementById(currentSquare).firstChild.classList.add("checker")
+              document.getElementById(currentSquare).firstChild.classList.add("red")
+              document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.remove("checker")
+              document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.remove("white")
+              document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.add("black")
+              document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.remove("square")
               // setBlackTurn(false);
-              blackTurn = false;
+              lastMoved=currentSquare;
               checkerNum=-20;
               //not sure if this line will work
 
               if(currentSquare>62){
-                document.getElementById(currentSquare).classList.add("king")
+                document.getElementById(currentSquare).classList.firstChild.add("king")
                 //promotion to king
               }
             }
@@ -214,23 +235,26 @@ function SquareClicked(currentSquare){
         }
 
         //if it's a king and moving backwards
-        else if(document.getElementById(checkerNum).classList.contains("king")){
+        else if(document.getElementById(checkerNum).firstChild.classList.contains("king")){
           if((checkerNum+8 ===currentSquare || checkerNum+10===currentSquare)){
-            document.getElementById(checkerNum).classList.remove("checker red")
-            document.getElementById(currentSquare).classList.add("checker red")
+            document.getElementById(checkerNum).firstChild.classList.remove("checker red")
+            document.getElementById(currentSquare).firstChild.classList.add("checker red")
             // setBlackTurn(false);
-            blackTurn = false;
+            lastMoved = currentSquare;
             checkerNum=-20;
           }
           
           else if((checkerNum+16===currentSquare||checkerNum+20===currentSquare)
-                    && document.getElementById((currentSquare-checkerNum)/2 +checkerNum).contains("checker white"))
+                    && document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.contains("checker white"))
                     {
-              document.getElementById(checkerNum).classList.remove("checker red")
-              document.getElementById(currentSquare).classList.add("checker red")
-              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).classList.remove("checker white")
+              document.getElementById(checkerNum).firstChild.classList.remove("checker")
+              document.getElementById(checkerNum).firstChild.classList.remove("red")
+              document.getElementById(currentSquare).classList.add("checker")
+              document.getElementById(currentSquare).firstChild.classList.add("red")
+              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.classList.remove("checker")
+              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.classList.remove("white")
               // setBlackTurn(false);
-              blackTurn = false;
+              lastMoved = currentSquare;
             
           }
 
@@ -240,34 +264,49 @@ function SquareClicked(currentSquare){
 
 
       else{
+        
         //if it's white's move
 
-        if(document.getElementById(checkerNum).contains("white")){
+        if(document.getElementById(checkerNum).firstChild.classList.contains("white")){
           if(checkerNum+8 ===currentSquare || checkerNum+10 ===currentSquare){
             //normal move for white side
-            document.getElementById(checkerNum).classList.remove("checker white")
-            document.getElementById(currentSquare).classList.add("checker white")
+            document.getElementById(checkerNum).firstChild.classList.remove("checker")
+            document.getElementById(checkerNum).firstChild.classList.remove("white")
+            document.getElementById(currentSquare).firstChild.classList.remove("black")
+            document.getElementById(currentSquare).firstChild.classList.remove("square")
+            document.getElementById(currentSquare).firstChild.classList.add("checker")
+            document.getElementById(currentSquare).firstChild.classList.add("white")
             // setBlackTurn(true);
             blackTurn = true;
+            lastMoved = currentSquare;
             checkerNum=-20;
 
             if(currentSquare<8){
-              document.getElementById(currentSquare).classList.add("king")
+              document.getElementById(currentSquare).firstChild.classList.add("king")
               //promotion to king
             }
         }
           else if(checkerNum+16 ===currentSquare || checkerNum+20 ===currentSquare){
-            if(document.getElementById((currentSquare-checkerNum)/2+checkerNum).classList.contains("checker red")){
+            if(document.getElementById((currentSquare-checkerNum)/2+checkerNum).firstChild.classList.contains("checker")&&document.getElementById((currentSquare-checkerNum)/2+checkerNum).firstChild.classList.contains("red")){
+              console.log("capture!!")
               //capture for white side
-              document.getElementById(checkerNum).classList.remove("checker white")
-              document.getElementById(currentSquare).classList.add("checker white")
-              document.getElementById((currentSquare-checkerNum)/2+ checkerNum).classList.remove("checker red")
+              document.getElementById(checkerNum).firstChild.classList.add("black")
+              document.getElementById(checkerNum).firstChild.classList.add("square")
+              document.getElementById(checkerNum).firstChild.classList.remove("checker")
+              document.getElementById(checkerNum).firstChild.classList.remove("white")
+
+              document.getElementById(currentSquare).firstChild.classList.remove("black")
+              document.getElementById(currentSquare).firstChild.classList.remove("square")
+              document.getElementById(currentSquare).firstChild.classList.add("checker")
+              document.getElementById(currentSquare).firstChild.classList.add("white")
+              document.getElementById((currentSquare-checkerNum)/2+ checkerNum).firstChild.classList.remove("checker")
+              document.getElementById((currentSquare-checkerNum)/2+ checkerNum).firstChild.classList.remove("red")
               // setBlackTurn(true);
-              blackTurn = true;
+              lastMoved=currentSquare;
               checkerNum=-20;
 
               if(currentSquare<8){
-                document.getElementById(currentSquare).classList.add("king")
+                document.getElementById(currentSquare).firstChild.classList.add("king")
                 //promotion to king
               }
           
@@ -276,10 +315,13 @@ function SquareClicked(currentSquare){
 
           else if(document.getElementById(checkerNum).classList.contains("king")){
             if(checkerNum-8===currentSquare||checkerNum-10===currentSquare){
-              document.getElementById(checkerNum).classList.remove("checker white")
-              document.getElementById(currentSquare).classList.add("checker white")
+              document.getElementById(checkerNum).firstChild.classList.remove("checker")
+              document.getElementById(checkerNum).firstChild.classList.remove("white")
+              document.getElementById(currentSquare).firstChild.classList.add("checker")
+              document.getElementById(currentSquare).firstChild.classList.add("white")
               // setBlackTurn(true);
               blackTurn = true;
+              lastMoved=currentSquare;
               checkerNum=-20;
 
             }
