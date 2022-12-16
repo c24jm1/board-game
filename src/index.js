@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client'
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import "./index.css"
 
 
@@ -17,14 +17,14 @@ import "./index.css"
 
 var checkerNum = -20;
 var lastMoved = 23;
-var blackTurn = true;
 
+var whoseTurn = "Red's turn"
 var redPieces = 13;
 var whitePieces = 13;
 
 function Square ({value}) {
 
-
+  // const [redsTurn, setRedsTurn] = useRef("Red's Turn");
 
   if (value % 2 === 0){
     return (
@@ -37,13 +37,13 @@ function Square ({value}) {
     if(value < 27){
       return(
         <div>
-        <button id = {value} className = {"square black"} onClick = {()=>SquareClicked(value)}><div className={"white checker"}></div></button>
+        <button id = {value} className = {"square black"} onClick = {()=>SquareClicked(value)}><div className={"white checker"}><div className = {"white"}></div></div></button>
         </div>
       )
     }
     else if(value>43){
       return(
-        <button id = {value} className = {"square black"} onClick = {()=>SquareClicked(value)}><div className={"checker red"}><div className = {"checker"}></div></div></button>
+        <button id = {value} className = {"square black"} onClick = {()=>SquareClicked(value)}><div className={"checker red"}><div className = {"red"}></div></div></button>
         
         )
     }
@@ -51,13 +51,22 @@ function Square ({value}) {
     else{
       return (
         <button id = {value} className={"square black"} onClick = {()=>SquareClicked(value)}>
-          <div className = {"square black"}></div>
+          <div className = {"square black"}><div className={"black"}></div></div>
           </button>
           
     );
   }
   }
+
+  
 }
+
+// function stuff(){
+//   return(
+//     <div>{whoseTurn}</div>
+
+//   )
+// }
 
 
 class Board extends React.Component {
@@ -66,6 +75,10 @@ class Board extends React.Component {
   }
 
   render() {
+
+    
+    
+    //(document.getElementById(lastMoved).firstChild.classList.contains("white")?"Red": "White" + "Turn")
 
     return (
       <div>
@@ -163,16 +176,11 @@ class Board extends React.Component {
 
 function SquareClicked(currentSquare){
 
-  // const [BlackTurn, setBlackTurn] = useState(true);
-
-  console.log(document.getElementById(currentSquare).firstChild.classList.value)
   if (document.getElementById(currentSquare).firstChild.classList.contains("checker")){
     
       checkerNum = currentSquare
-      console.log(checkerNum)
   }
   else{
-    console.log("no checker on square!")
 
 
     if(checkerNum >0){
@@ -194,25 +202,30 @@ function SquareClicked(currentSquare){
             document.getElementById(currentSquare).firstChild.classList.remove("black")
             document.getElementById(currentSquare).firstChild.classList.add("checker")
             document.getElementById(currentSquare).firstChild.classList.add("red")
-            // setBlackTurn(false);
+            
+            document.getElementById(checkerNum).firstChild.firstChild.classList.remove("red")
+            document.getElementById(checkerNum).firstChild.firstChild.classList.add("black")
+            document.getElementById(currentSquare).firstChild.firstChild.classList.remove("black")
+            document.getElementById(currentSquare).firstChild.firstChild.classList.add("red")
+
+
             lastMoved = currentSquare;
+            whoseTurn = "White's Turn"
+            
+            console.log("whose turn", whoseTurn)
             checkerNum = -20;
 
-            if(currentSquare>62){
+            if(currentSquare<8){
+              document.getElementById(currentSquare).firstChild.firstChild.classList.remove("red")
               document.getElementById(currentSquare).firstChild.firstChild.classList.add("king")
                 //promotion to king
               }
+
+              return(<div id = "text">{whoseTurn}</div>)
         }
           else if((checkerNum-16===currentSquare||checkerNum-20===currentSquare)){
-            console.log("potential capture")
-            console.log(checkerNum)
-            console.log(currentSquare)
-            console.log((checkerNum-currentSquare)/2)
-            console.log((checkerNum-currentSquare)/2 +currentSquare)
-            console.log(document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.value)
               //if they try to capture
             if(document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.contains("checker")&&document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.contains("white")){
-                console.log("red capture!!")
                 whitePieces-=1;
 
               //check if there's a checker in between
@@ -220,20 +233,40 @@ function SquareClicked(currentSquare){
               document.getElementById(checkerNum).firstChild.classList.remove("red")
               document.getElementById(checkerNum).firstChild.classList.add("black")
               document.getElementById(checkerNum).firstChild.classList.add("square")
+              document.getElementById(checkerNum).firstChild.firstChild.classList.remove("red")
+              document.getElementById(checkerNum).firstChild.firstChild.classList.add("black")
+
+              document.getElementById(currentSquare).firstChild.classList.remove("square")
+              document.getElementById(currentSquare).firstChild.classList.remove("black")
               document.getElementById(currentSquare).firstChild.classList.add("checker")
               document.getElementById(currentSquare).firstChild.classList.add("red")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.remove("black")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.add("red")
+
+
               document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.remove("checker")
               document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.remove("white")
               document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.add("black")
               document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.remove("square")
-              // setBlackTurn(false);
-              lastMoved=currentSquare;
-              checkerNum=-20;
-              //not sure if this line will work
+              document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.firstChild.classList.remove("white")
+              document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.firstChild.classList.add("black")
 
-              if(currentSquare>62){
-                document.getElementById(currentSquare).classList.firstChild.add("king")
-                //promotion to king
+
+              lastMoved=currentSquare;
+              whoseTurn= "White's"
+              checkerNum=-20;
+              
+              if(whitePieces===0){
+                return <div>Red Wins!</div>
+              }
+              else if(whitePieces!==0){
+                console.log("keep playing")
+              }
+
+              if(currentSquare<8){
+                document.getElementById(currentSquare).firstChild.firstChild.classList.remove("red")
+                document.getElementById(currentSquare).firstChild.firstChild.classList.add("king")
+                //promotion to king capture
               }
             }
             // document.getElementById()
@@ -242,10 +275,18 @@ function SquareClicked(currentSquare){
         //if it's a king and moving backwards
         else if(document.getElementById(checkerNum).firstChild.classList.contains("king")){
           if((checkerNum+8 ===currentSquare || checkerNum+10===currentSquare)){
-            document.getElementById(checkerNum).firstChild.classList.remove("checker red")
-            document.getElementById(currentSquare).firstChild.classList.add("checker red")
-            // setBlackTurn(false);
+            document.getElementById(checkerNum).firstChild.classList.remove("checker")
+            document.getElementById(checkerNum).firstChild.classList.remove("red")
+            document.getElementById(checkerNum).firstChild.firstChild.classList.remove("king")
+            document.getElementById(checkerNum).firstChild.firstChild.classList.add("black")
+
+            document.getElementById(currentSquare).firstChild.classList.add("red")
+            document.getElementById(currentSquare).firstChild.classList.add("checker")
+            document.getElementById(currentSquare).firstChild.firstChild.classList.remove("black")
+            document.getElementById(currentSquare).firstChild.firstChild.classList.add("king")
+
             lastMoved = currentSquare;
+            whoseTurn= "White's Turn";
             checkerNum=-20;
           }
           
@@ -255,12 +296,19 @@ function SquareClicked(currentSquare){
                     {
               document.getElementById(checkerNum).firstChild.classList.remove("checker")
               document.getElementById(checkerNum).firstChild.classList.remove("red")
+              document.getElementById(checkerNum).firstChild.firstChild.classList.remove("red")
+              document.getElementById(checkerNum).firstChild.firstChild.classList.add("black")
               document.getElementById(currentSquare).classList.add("checker")
               document.getElementById(currentSquare).firstChild.classList.add("red")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.remove("black")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.add("red")
               document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.classList.remove("checker")
               document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.classList.remove("white")
-              // setBlackTurn(false);
+              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.firstChild.classList.remove("white")
+              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.firstChild.classList.add("black")
+
               lastMoved = currentSquare;
+              whoseTurn= "White's Turn";
               whitePieces-=1;
             
           }
@@ -270,7 +318,15 @@ function SquareClicked(currentSquare){
       }//end of blackTurn if statement
 
 
+
+
+
+
+
+
+      //white's turn from here on
       else{
+
         
         //if it's white's move
 
@@ -279,76 +335,121 @@ function SquareClicked(currentSquare){
             //normal move for white side
             document.getElementById(checkerNum).firstChild.classList.remove("checker")
             document.getElementById(checkerNum).firstChild.classList.remove("white")
+            document.getElementById(checkerNum).firstChild.firstChild.classList.remove("white")
+            document.getElementById(checkerNum).firstChild.firstChild.classList.add("black")
+
+            document.getElementById(currentSquare).firstChild.firstChild.classList.remove("black")
+            document.getElementById(currentSquare).firstChild.firstChild.classList.add("white")
             document.getElementById(currentSquare).firstChild.classList.remove("black")
             document.getElementById(currentSquare).firstChild.classList.remove("square")
             document.getElementById(currentSquare).firstChild.classList.add("checker")
             document.getElementById(currentSquare).firstChild.classList.add("white")
             // setBlackTurn(true);
-            blackTurn = true;
             lastMoved = currentSquare;
+            whoseTurn= "Red's Turn"
             checkerNum=-20;
 
-            if(currentSquare<8){
-              document.getElementById(currentSquare).firstChild.classList.add("king")
+            if(currentSquare>62){
+              document.getElementById(currentSquare).firstChild.firstChild.classList.remove("white")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.add("king")
               //promotion to king
+            }
+            else{
+              console.log("not promotion", currentSquare)
             }
         }
           else if(checkerNum+16 ===currentSquare || checkerNum+20 ===currentSquare){
             if(document.getElementById((currentSquare-checkerNum)/2+checkerNum).firstChild.classList.contains("checker")&&document.getElementById((currentSquare-checkerNum)/2+checkerNum).firstChild.classList.contains("red")){
             
 
-              redPieces-=1;
-              console.log(redPieces)
               //capture for white side
               document.getElementById(checkerNum).firstChild.classList.add("black")
               document.getElementById(checkerNum).firstChild.classList.add("square")
               document.getElementById(checkerNum).firstChild.classList.remove("checker")
               document.getElementById(checkerNum).firstChild.classList.remove("white")
+              document.getElementById(checkerNum).firstChild.firstChild.classList.remove("white")
+              document.getElementById(checkerNum).firstChild.firstChild.classList.add("black")
 
               document.getElementById(currentSquare).firstChild.classList.remove("black")
               document.getElementById(currentSquare).firstChild.classList.remove("square")
               document.getElementById(currentSquare).firstChild.classList.add("checker")
               document.getElementById(currentSquare).firstChild.classList.add("white")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.remove("black")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.add("white")
+
               document.getElementById((currentSquare-checkerNum)/2+ checkerNum).firstChild.classList.remove("checker")
               document.getElementById((currentSquare-checkerNum)/2+ checkerNum).firstChild.classList.remove("red")
+              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.firstChild.classList.remove("red")
+              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.firstChild.classList.add("black")
+
+
+
               // setBlackTurn(true);
               lastMoved=currentSquare;
+              whoseTurn = "Red's Turn";
               checkerNum=-20;
 
-              if(currentSquare<8){
-                document.getElementById(currentSquare).firstChild.classList.add("king")
+              if(currentSquare>62){
+                document.getElementById(currentSquare).firstChild.firstChild.classList.remove("white")
+                document.getElementById(currentSquare).firstChild.firstChild.classList.add("king")
                 //promotion to king
+              }
+
+              redPieces-=1;
+
+              if(redPieces===0){
+                console.log("White wins!")
               }
           
             }
         }
 
+
+        //backwards king move for white
           else if(document.getElementById(checkerNum).classList.contains("king")){
             if(checkerNum-8===currentSquare||checkerNum-10===currentSquare){
               document.getElementById(checkerNum).firstChild.classList.remove("checker")
               document.getElementById(checkerNum).firstChild.classList.remove("white")
+              document.getElementById(checkerNum).firstChild.firstChild.classList.remove("white")
+              document.getElementById(checkerNum).firstChild.firstChild.classList.add("black")
+
               document.getElementById(currentSquare).firstChild.classList.add("checker")
               document.getElementById(currentSquare).firstChild.classList.add("white")
-              // setBlackTurn(true);
-              blackTurn = true;
+              document.getElementById(currentSquare).firstChild.firstChild.classList.remove("black")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.add("white")
+
               lastMoved=currentSquare;
+              whoseTurn= "Red's Turn";
               checkerNum=-20;
 
             }
           }
           else if((checkerNum-16===currentSquare||checkerNum-20===currentSquare)
-          //king backwards capture
+          //king backwards capture white
                     && document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.contains("checker red"))
                     {
               document.getElementById(checkerNum).firstChild.classList.remove("checker")
               document.getElementById(checkerNum).firstChild.classList.remove("white")
-              document.getElementById(currentSquare).classList.add("checker")
+              document.getElementById(checkerNum).firstChild.firstChild.classList.remove("white")
+              document.getElementById(checkerNum).firstChild.firstChild.classList.add("black")
+
+              document.getElementById(currentSquare).firstChild.classList.add("checker")
               document.getElementById(currentSquare).firstChild.classList.add("white")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.remove("black")
+              document.getElementById(currentSquare).firstChild.firstChild.classList.add("white")
               document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.classList.remove("checker")
               document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.classList.remove("red")
-              // setBlackTurn(false);
+              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.firstChild.classList.remove("white")
+              document.getElementById((currentSquare-checkerNum)/2 +checkerNum).firstChild.firstChild.classList.add("black")
+
+
               lastMoved = currentSquare;
+              whoseTurn = "Red's Turn";
               redPieces-=1;
+
+              if(redPieces===0){
+                console.log("White wins!")
+              }
             
           }
 
@@ -382,7 +483,6 @@ class Game extends React.Component {
         history:[{
         Board}],
         stepNumber:0,
-        blackTurn: true,
     }
   }
 
