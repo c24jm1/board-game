@@ -55,18 +55,11 @@ ul{
 
 .square{
     border: 1px solid #999;
-    height: 10px;
-    width: 50px;
     float:left;
-    font-size:24px;
-    font-weight: bold;
-    line-height: 34px;
     height:34px;
-    margin-right: -1px;
-    margin-top:-1px;
+    margin: -1px;
     padding: 0;
-    text-align:center;
-    width:34px;
+    width:33px;
 }
 
 .white{
