@@ -19,8 +19,10 @@ var checkerNum = -20;
 var lastMoved = 23;
 
 var whoseTurn = "Red's turn"
-var redPieces = 13;
-var whitePieces = 13;
+
+var outsideBlackTurn = true;
+var redPieces = 12;
+var whitePieces = 12;
 
 function Square ({value}) {
 
@@ -61,27 +63,48 @@ function Square ({value}) {
   
 }
 
-// function stuff(){
-//   return(
-//     <div>{whoseTurn}</div>
-
-//   )
-// }
-
-
 class Board extends React.Component {
-  renderSquare(i) {
-    return <Square value={i} />;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      numberRed: 12,
+      numberWhite:12,
+      won: ""
+    };
   }
+
+
+
+  renderSquare(i) {
+    return <Square value={i} 
+    />;
+  }
+
 
   render() {
 
+
+    let status;
     
-    
+    this.setState({
+      numberRed:countPieces("red", this.current.Square),
+      numberWhite:countPieces("white", this.current.Square),
+    })
+
+    if(this.numberRed ===0){
+      status = calculateWinner("white", Square)
+    }
+    else if (this.numberWhite===0){
+      status = calculateWinner("red", Square)
+    }
+
     //(document.getElementById(lastMoved).firstChild.classList.contains("white")?"Red": "White" + "Turn")
 
     return (
+      
       <div>
+        <div>{status}</div>
               <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -219,8 +242,8 @@ function SquareClicked(currentSquare){
 
             lastMoved = currentSquare;
             whoseTurn = "White's Turn"
+            outsideBlackTurn = false;
             
-            console.log("whose turn", whoseTurn)
             checkerNum = -20;
 
             if(currentSquare<8){
@@ -258,7 +281,7 @@ function SquareClicked(currentSquare){
               document.getElementById(checkerNum).firstChild.classList.remove("red")
               document.getElementById(checkerNum).firstChild.classList.add("black")
 
-              if(document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.classList.contains("king")){
+              if(document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.firstChild.classList.contains("king")){
                 document.getElementById((checkerNum-currentSquare)/2 + currentSquare).firstChild.firstChild.remove("king")
               }
               else{
@@ -271,14 +294,15 @@ function SquareClicked(currentSquare){
 
 
               lastMoved=currentSquare;
-              whoseTurn= "White's"
+              whoseTurn= "White's Turn"
               checkerNum=-20;
               
               if(whitePieces===0){
+                console.log("Red wins!")
                 return <div>Red Wins!</div>
               }
               else if(whitePieces!==0){
-                console.log("keep playing")
+                console.log("keep playing. white pieces:", whitePieces)
               }
 
               if(currentSquare<8 &&document.getElementById(currentSquare).firstChild.firstChild.classList.contains("red")){
@@ -509,6 +533,9 @@ function SquareClicked(currentSquare){
               if(redPieces===0){
                 console.log("White wins!")
               }
+              else{
+                console.loge("keep playing", redPieces)
+              }
             
             }
           }
@@ -547,19 +574,85 @@ class Game extends React.Component {
     }
   }
 
+  handleClick(i){
+    const history = this.state.history;
+    const current = history[history.length-1];
+    const squares = current.squares.slice();
+    if(calculateWinner()){
+        return;
+    }
+    this.setState({
+        history:history.concat([{
+        squares:squares,
+    }]),
+    })
+}
+
 
   render() {
+
+    const winner = calculateWinner();
+
+    const Turn = calculateWhoseTurn();
+
+    let status;
+        if(winner){
+            status = ('Winner: '+winner);
+        }
+        else{
+          status = (Turn)
+        }
     return (
       <div className="game">
         <div className="game-board">
           <Board />
         </div>
         <div className="game-info">
-          <div>{/* status */}</div>
+          <div>{status}</div>
           <ol>{/* TODO */}</ol>
         </div>
       </div>
     );
+  }
+}
+
+function countPieces(color, Square){
+  var smallRed = 0;
+  var smallWhite = 0
+  for(let i = 0; i<8; i++){
+    console.log(i*9+i)
+    if(document.getElementById(i*9+i).firstChild.classList.contains("checker red")){
+      smallRed+=1;
+    }
+    else if(Square(i).firstChild.classList.contains("checker white")){
+      smallWhite+=1;
+    }
+  }
+  if(color === "red"){
+    return smallRed
+  }
+  else{
+    return smallWhite
+  }
+
+}
+
+function calculateWinner(){
+  if(countPieces("white", Square)===0){
+    return "Red Wins!"
+  }
+  else if(countPieces("red", Square)===0){
+    return "Red Wins!"
+  }
+  return null
+}
+
+function calculateWhoseTurn(){
+  if(whoseTurn.includes("Red")){
+    return "Red's Move"
+  }
+  else{
+    return "White's Move"
   }
 }
 
